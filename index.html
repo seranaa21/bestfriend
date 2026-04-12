@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memory For You</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ff4d6d, #c9184a, #590d22);
+      color: white;
+    }
+
+    .container {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: 90%;
+      max-width: 360px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      opacity: 0.9;
+      margin-bottom: 18px;
+      min-height: 42px;
+      line-height: 1.5;
+    }
+
+    .slide {
+      display: none;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    .slide img {
+      width: 100%;
+      border-radius: 18px;
+      display: block;
+      margin-bottom: 14px;
+    }
+
+    .quote {
+      font-size: 16px;
+      font-style: italic;
+      line-height: 1.6;
+      min-height: 70px;
+    }
+
+    .controls {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    button {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: white;
+      color: #c9184a;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .dots {
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+    }
+
+    .dot.active {
+      background: white;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="title">Memory</div>
+      <div class="subtitle" id="text"></div>
+
+      <div class="slide active">
+        <img src="foto1.jpeg" alt="Memory 1">
+        <div class="quote">I have faith in what I see.</div>
+      </div>
+
+      <div class="slide">
+        <img src="foto2.jpeg" alt="Memory 2">
+        <div class="quote">Now I know I have met an angel in person.</div>
+      </div>
+
+      <div class="slide">
+        <img src="foto3.jpeg" alt="Memory 3">
+        <div class="quote">She looks perfect.</div>
+      </div>
+
+      <div class="slide">
+        <img src="foto4.jpeg" alt="Memory 4">
+        <div class="quote">You look perfect tonight.</div>
+      </div>
+
+      <div class="controls">
+        <button onclick="prevSlide()">⬅ Prev</button>
+        <button onclick="nextSlide()">Next ➡</button>
+      </div>
+
+      <div class="dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const text = document.getElementById("text");
+    const message = "A little memory, for someone who means everything.";
+    let i = 0;
+
+    function typeText() {
+      if (i < message.length) {
+        text.innerHTML += message.charAt(i);
+        i++;
+        setTimeout(typeText, 40);
+      }
+    }
+    typeText();
+
+    let index = 0;
+    const slides = document.querySelectorAll(".slide");
+    const dots = document.querySelectorAll(".dot");
+
+    function showSlide(n) {
+      if (n >= slides.length) index = 0;
+      if (n < 0) index = slides.length - 1;
+
+      slides.forEach(s => s.classList.remove("active"));
+      dots.forEach(d => d.classList.remove("active"));
+
+      slides[index].classList.add("active");
+      dots[index].classList.add("active");
+    }
+
+    function nextSlide() {
+      index++;
+      showSlide(index);
+    }
+
+    function prevSlide() {
+      index--;
+      showSlide(index);
+    }
+
+    setInterval(() => {
+      index++;
+      showSlide(index);
+    }, 4000);
+  </script>
+</body>
+</html>
