@@ -1,232 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Memory For You</title>
-  <style>
-    /* LOVE ANIMATION */
-.heart {
-  position: fixed;
-  top: -10px;
-  font-size: 20px;
-  color: #ff4d6d;
-  animation: fall 4s linear forwards;
-  pointer-events: none;
-  z-index: 9999;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Memory For You</title>
+
+<style>
+
+/* ===== BACKGROUND ===== */
+body{
+  margin:0;
+  font-family:Arial;
+  overflow:hidden;
+  background: radial-gradient(circle at top,#ffb3c6,#ff4d6d,#590d22);
+  color:white;
 }
 
-@keyframes fall {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100vh) scale(1.5);
-    opacity: 0;
+/* ===== OPENING ===== */
+#startScreen{
+  position:fixed;
+  inset:0;
+  background: radial-gradient(circle,#ff4d6d,#590d22);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  color:white;
+}
+
+#startScreen button{
+  padding:12px 20px;
+  border:none;
+  border-radius:30px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* ===== CARD ===== */
+.container{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.card{
+  width:90%;
+  max-width:380px;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(20px);
+  padding:25px;
+  border-radius:25px;
+  text-align:center;
+  box-shadow:0 15px 40px rgba(0,0,0,0.3);
+}
+
+/* ===== SLIDE ===== */
+.slide{display:none;}
+.slide.active{display:block;}
+
+img{
+  width:100%;
+  border-radius:18px;
+  margin-bottom:10px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+  border:3px solid rgba(255,255,255,0.2);
+}
+
+/* ===== BUTTON ===== */
+button{
+  border:none;
+  padding:10px 14px;
+  border-radius:999px;
+  cursor:pointer;
+  background:white;
+  color:#c9184a;
+  font-weight:bold;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.1);
+}
+
+.controls{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:10px;
+}
+
+.dots{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin-top:10px;
+}
+
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.4);
+}
+
+.dot.active{
+  background:white;
+  box-shadow:0 0 10px white;
+}
+
+/* ===== LOVE / ROSE / STAR ===== */
+.heart,.rose,.star{
+  position:fixed;
+  top:-10px;
+  pointer-events:none;
+  z-index:999;
+  animation:fall linear forwards;
+}
+
+.heart{color:#ff4d6d;font-size:20px;}
+.rose{font-size:18px;}
+.star{color:white;font-size:12px;}
+
+@keyframes fall{
+  to{
+    transform:translateY(100vh) rotate(360deg);
+    opacity:0;
   }
 }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-      background: linear-gradient(135deg, #ff4d6d, #c9184a, #590d22);
-      color: white;
-    }
+/* ===== LETTER ===== */
+#letterBox{
+  position:fixed;
+  bottom:-300px;
+  left:50%;
+  transform:translateX(-50%);
+  width:85%;
+  max-width:350px;
+  background:rgba(255,255,255,0.2);
+  backdrop-filter:blur(15px);
+  padding:20px;
+  border-radius:20px;
+  text-align:center;
+  transition:0.8s;
+}
 
-    .container {
-      width: 100%;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-    }
+/* ===== STARS ===== */
+.stars{
+  position:fixed;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  z-index:-1;
+}
 
-    .card {
-      width: 90%;
-      max-width: 360px;
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(10px);
-      border-radius: 24px;
-      padding: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    }
+.starbg{
+  position:absolute;
+  width:3px;
+  height:3px;
+  background:white;
+  border-radius:50%;
+  opacity:0.5;
+}
 
-    .title {
-      font-size: 28px;
-      font-weight: bold;
-      margin-bottom: 12px;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    .subtitle {
-      font-size: 15px;
-      opacity: 0.9;
-      margin-bottom: 18px;
-      min-height: 42px;
-      line-height: 1.5;
-    }
-
-    .slide {
-      display: none;
-      animation: fadeIn 0.8s ease-in-out;
-    }
-
-    .slide.active {
-      display: block;
-    }
-
-    .slide img {
-      width: 100%;
-      border-radius: 18px;
-      display: block;
-      margin-bottom: 14px;
-    }
-
-    .quote {
-      font-size: 16px;
-      font-style: italic;
-      line-height: 1.6;
-      min-height: 70px;
-    }
-
-    .controls {
-      margin-top: 16px;
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-
-    button {
-      border: none;
-      padding: 10px 16px;
-      border-radius: 999px;
-      background: white;
-      color: #c9184a;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .dots {
-      margin-top: 14px;
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.4);
-    }
-
-    .dot.active {
-      background: white;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+</style>
 </head>
+
 <body>
-  <audio id="bgmusic" loop>
-  <source src="musik.mpeg" type="audio/mpeg">
+
+<!-- OPENING -->
+<div id="startScreen">
+  <h1>💖 Memory For You 💖</h1>
+  <button onclick="start()">ENTER</button>
+</div>
+
+<!-- MUSIC -->
+<audio id="music" loop>
+  <source src="musik.mp3" type="audio/mpeg">
 </audio>
-  <div class="container">
-    <div class="card">
-      <div class="title">Memory</div>
-      <div class="subtitle" id="text"></div>
 
-      <div class="slide active">
-        <img src="foto1.jpeg" alt="Memory 1">
-        <div class="quote">I have faith in what I see.</div>
-      </div>
+<!-- STARS -->
+<div class="stars"></div>
 
-      <div class="slide">
-        <img src="foto2.jpeg" alt="Memory 2">
-        <div class="quote">Now I know I have met an angel in person.</div>
-      </div>
+<!-- LETTER -->
+<div id="letterBox">
+💌<br><br>
+You are my favorite memory.<br>
+<small>— someone who cares about you</small>
+</div>
 
-      <div class="slide">
-        <img src="foto3.jpeg" alt="Memory 3">
-        <div class="quote">She looks perfect.</div>
-      </div>
+<!-- CONTENT -->
+<div class="container">
+<div class="card">
 
-      <div class="slide">
-        <img src="foto4.jpeg" alt="Memory 4">
-        <div class="quote">You look perfect tonight.</div>
-      </div>
+  <h2>Memory</h2>
 
-      <div class="controls">
-        <button onclick="prevSlide()">⬅ Prev</button>
-        <button onclick="nextSlide()">Next ➡</button>
-      </div>
-
-      <div class="dots">
-        <div class="dot active"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
-    </div>
+  <div class="slide active">
+    <img src="foto1.jpeg">
+    <p>I have faith in what I see.</p>
   </div>
 
-  <script>
-    const text = document.getElementById("text");
-    const message = "A little memory, for someone who means everything.";
-    let i = 0;
+  <div class="slide">
+    <img src="foto2.jpeg">
+    <p>Now I know I met an angel.</p>
+  </div>
 
-    function typeText() {
-      if (i < message.length) {
-        text.innerHTML += message.charAt(i);
-        i++;
-        setTimeout(typeText, 40);
-      }
-    }
-    typeText();
+  <div class="slide">
+    <img src="foto3.jpeg">
+    <p>She looks perfect.</p>
+  </div>
 
-    let index = 0;
-    const slides = document.querySelectorAll(".slide");
-    const dots = document.querySelectorAll(".dot");
+  <div class="slide">
+    <img src="foto4.jpeg">
+    <p>You look perfect tonight.</p>
+  </div>
 
-    function showSlide(n) {
-      if (n >= slides.length) index = 0;
-      if (n < 0) index = slides.length - 1;
+  <div class="controls">
+    <button onclick="prev()">⬅</button>
+    <button onclick="next()">➡</button>
+  </div>
 
-      slides.forEach(s => s.classList.remove("active"));
-      dots.forEach(d => d.classList.remove("active"));
+  <div class="dots">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
 
-      slides[index].classList.add("active");
-      dots[index].classList.add("active");
-    }
+</div>
+</div>
 
-    function nextSlide() {
-      index++;
-      showSlide(index);
-    }
+<script>
 
-    function prevSlide() {
-      index--;
-      showSlide(index);
-    }
+/* ===== START ===== */
+function start(){
+  document.getElementById("startScreen").style.display="none";
+  const music=document.getElementById("music");
+  music.play().catch(()=>{});
+}
 
-    setInterval(() => {
-      index++;
-      showSlide(index);
-    }, 4000);
-  </script>
+/* ===== SLIDE ===== */
+let index=0;
+const slides=document.querySelectorAll(".slide");
+const dots=document.querySelectorAll(".dot");
+
+function show(n){
+  index=(n+slides.length)%slides.length;
+
+  slides.forEach(s=>s.classList.remove("active"));
+  dots.forEach(d=>d.classList.remove("active"));
+
+  slides[index].classList.add("active");
+  dots[index].classList.add("active");
+}
+
+function next(){show(index+1)}
+function prev(){show(index-1)}
+
+setInterval(()=>show(index+1),4000);
+
+/* ===== LOVE / ROSE / STAR ===== */
+function spawn(type,emoji,size){
+  const el=document.createElement("div");
+  el.classList.add(type);
+  el.innerHTML=emoji;
+  el.style.left=Math.random()*window.innerWidth+"px";
+  el.style.fontSize=(Math.random()*20+10)+"px";
+  el.style.animationDuration=(Math.random()*3+2)+"s";
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),5000);
+}
+
+setInterval(()=>spawn("heart","❤️"),250);
+setInterval(()=>spawn("rose","🌹"),600);
+setInterval(()=>spawn("star","✨"),200);
+
+/* ===== LETTER POPUP ===== */
+setTimeout(()=>{
+  document.getElementById("letterBox").style.bottom="30px";
+},3000);
+
+/* ===== STAR BACKGROUND ===== */
+function createStars(){
+  const container=document.querySelector(".stars");
+
+  for(let i=0;i<80;i++){
+    const s=document.createElement("div");
+    s.classList.add("starbg");
+
+    s.style.top=Math.random()*100+"%";
+    s.style.left=Math.random()*100+"%";
+    s.style.opacity=Math.random();
+
+    container.appendChild(s);
+  }
+}
+createStars();
+
+</script>
+
 </body>
 </html>
